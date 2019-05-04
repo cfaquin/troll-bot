@@ -1,6 +1,6 @@
 
 import Foundation
-
+import Crypto 
 
 class StaticDumbBrain {
     
@@ -11,6 +11,7 @@ class StaticDumbBrain {
         switch text {
             
         case let text where (text.contains(Trigger.fail.rawValue)) || (text.contains(Trigger.failure.rawValue)) || (text.contains(Trigger.failed.rawValue)) || (text.contains(Trigger.error.rawValue)) || (text.contains(Trigger.errors.rawValue)):
+            
             return FailureMocking(rawValue: Int.random(in: 0..<FailureMocking.caseCount))?.words
             
         case let text where (text.contains(Trigger.icp.rawValue)) || (text.contains(Trigger.clown.rawValue)) || (text.contains(Trigger.possee.rawValue)):
@@ -30,6 +31,17 @@ class StaticDumbBrain {
         default:
             return nil
         }
+    }
+    
+    
+    
+    private func randomInt(caseCount: Int) -> Int {
+        
+        var intArray = [Int]()
+        for index in 0..<caseCount {
+            intArray.append(index)
+        }
+        return intArray.random ?? 0
     }
     
 }
