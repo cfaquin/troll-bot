@@ -28,10 +28,10 @@ final class TrollbotController: RouteCollection {
             let requestString = String(data: rawData, encoding: .utf8) {
             
             let finalString = "v0:\(timestamp):\(requestString)"
-            let hmac = try HMAC.SHA256.authenticate(finalString, key: Environment.get("signingSecret")!)
+            let hmac = try HMAC.SHA256.authenticate(finalString, key: Environment.get("SIGNING_SECRET")!)
             let hash = hmac.map { String(format: "%02x", $0) }.joined()
             
-            if "v0=\(hash)" == secrect, data.api_app_id != Environment.get("apiAppID") {
+            if "v0=\(hash)" == secrect, data.api_app_id != Environment.get("CLIENT_ID") {
                 reply(data.event)
                 return HTTPResponse(status: .ok)
             }
@@ -59,7 +59,7 @@ final class TrollbotController: RouteCollection {
    
         let channel = event.channel ?? ""
         let response = """
-            { "text": "\(trollResponse)", "channel": "\(channel)" }
+            { "text": "\(trollResponse)", "channel": "\(channel)", "as_user": false }
             """
         self.sendMessage(data: response)
     }
@@ -68,7 +68,7 @@ final class TrollbotController: RouteCollection {
     
     private func sendMessage(data: String) {
         
-        let token = "Bearer \(Environment.get("OAUTHBotToken")!)"
+        let token = "Bearer \(Environment.get("OAUTH_BOT_TOKEN")!)"
        
         guard let slackURL = URL(string: "https://slack.com/api/chat.postMessage") else { return }
 
