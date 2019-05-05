@@ -1,6 +1,7 @@
 import Vapor
 import Crypto
 import Foundation
+import Logging
 
 /// Controls basic CRUD operations on `Todo`s.
 final class TrollbotController: RouteCollection {
@@ -13,16 +14,20 @@ final class TrollbotController: RouteCollection {
     
     
     
-    func send(_ request: Request, _ data: SlackRequest) throws -> HTTPResponse {
-        
+    func send(_ request: Request, _ data: SlackRequest) throws -> HTTPStatus {
+      /*
         if data.type == "url_verification", let challenge = data.challenge {
             
             var response = HTTPResponse(status: .ok, body: challenge)
             response.headers.add(name: .contentType, value:"text/plain")
-            return response
+            return .ok
         }
+        */
+        let logger = try request.make(Logger.self)
+        logger.verbose(request.http.body.debugDescription)
+        logger.verbose(request.http.headers.debugDescription)
         
-        if let secrect = request.http.headers.firstValue(name: HTTPHeaderName("X-Slack-Signature")),
+        if let secret = request.http.headers.firstValue(name: HTTPHeaderName("X-Slack-Signature")),
             let timestamp = request.http.headers.firstValue(name: HTTPHeaderName("X-Slack-Request-Timestamp")),
             let rawData = request.http.body.data,
             let requestString = String(data: rawData, encoding: .utf8) {
@@ -31,20 +36,18 @@ final class TrollbotController: RouteCollection {
             let hmac = try HMAC.SHA256.authenticate(finalString, key: Environment.get("SIGNING_SECRET")!)
             let hash = hmac.map { String(format: "%02x", $0) }.joined()
             
-            if "v0=\(hash)" == secrect {
+            if "v0=\(hash)" == secret {
                 reply(data.event)
-                return HTTPResponse(status: .ok)
+                return .ok
             }
         }
         
-        return HTTPResponse(status: .unauthorized)
+        return .unauthorized
     }
     
     
     
-    private func reply(_ event: SlackEvent?) {
-        
-        guard let event = event else { return }
+    private func reply(_ event: SlackEvent) {
         
         DispatchQueue.global().async {
             self.checkForReply(event)
@@ -53,14 +56,18 @@ final class TrollbotController: RouteCollection {
     
     
     
-    private func checkForReply(_ event: SlackEvent?) {
+    private func checkForReply(_ event: SlackEvent) {
         
-        guard let event = event, let input = event.text, let trollResponse = StaticDumbBrain().analyzeMessageAndCreateResponse(input) else { return }
+        print("pre-troll response")
+        guard let input = event.text, let trollResponse = StaticDumbBrain().analyzeMessageAndCreateResponse(input) else { return }
    
+        print("troll response")
+        
         let channel = event.channel ?? ""
+        
         let response = """
-            { "text": "\(trollResponse)", "channel": "\(channel)", "as_user": false }
-            """
+        { "text": "\(trollResponse)", "channel": "\(channel)", "as_user": "false" }
+        """
         self.sendMessage(data: response)
     }
    
