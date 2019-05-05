@@ -31,7 +31,7 @@ final class TrollbotController: RouteCollection {
             let hmac = try HMAC.SHA256.authenticate(finalString, key: Environment.get("SIGNING_SECRET")!)
             let hash = hmac.map { String(format: "%02x", $0) }.joined()
             
-            if "v0=\(hash)" == secrect, data.api_app_id != Environment.get("CLIENT_ID") {
+            if "v0=\(hash)" == secrect {
                 reply(data.event)
                 return HTTPResponse(status: .ok)
             }
