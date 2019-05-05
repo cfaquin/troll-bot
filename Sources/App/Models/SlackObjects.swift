@@ -11,7 +11,7 @@ struct SlackRequest: Content {
     let authed_users: [String]
     let event_id: String
     let event_time: UInt64
-    //let challenge: String?
+    let challenge: String?
 }
 
 struct SlackEvent: Content {

@@ -15,14 +15,14 @@ final class TrollbotController: RouteCollection {
     
     
     func send(_ request: Request, _ data: SlackRequest) throws -> HTTPStatus {
-      /*
+      
         if data.type == "url_verification", let challenge = data.challenge {
             
             var response = HTTPResponse(status: .ok, body: challenge)
             response.headers.add(name: .contentType, value:"text/plain")
             return .ok
         }
-        */
+ 
         let logger = try request.make(Logger.self)
         logger.verbose(request.http.body.debugDescription)
         logger.verbose(request.http.headers.debugDescription)
