@@ -14,13 +14,13 @@ final class TrollbotController: RouteCollection {
     
     
     
-    func send(_ request: Request, _ data: SlackRequest) throws -> HTTPStatus {
+    func send(_ request: Request, _ data: SlackRequest) throws -> HTTPResponse {
       
         if data.type == "url_verification", let challenge = data.challenge {
             
             var response = HTTPResponse(status: .ok, body: challenge)
             response.headers.add(name: .contentType, value:"text/plain")
-            return .ok
+            return response
         }
  
         let logger = try request.make(Logger.self)
@@ -38,11 +38,11 @@ final class TrollbotController: RouteCollection {
             
             if "v0=\(hash)" == secret {
                 reply(data.event)
-                return .ok
+                return HTTPResponse(status: .ok)
             }
         }
         
-        return .unauthorized
+        return HTTPResponse(status: .unauthorized)
     }
     
     
