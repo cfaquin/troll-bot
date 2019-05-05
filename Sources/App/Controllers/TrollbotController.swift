@@ -14,14 +14,7 @@ final class TrollbotController: RouteCollection {
     
     
     
-    func send(_ request: Request, _ data: SlackRequest) throws -> HTTPResponse {
-      
-        if data.type == "url_verification", let challenge = data.challenge {
-            
-            var response = HTTPResponse(status: .ok, body: challenge)
-            response.headers.add(name: .contentType, value:"text/plain")
-            return response
-        }
+    func send(_ request: Request, _ data: SlackRequest) throws -> HTTPStatus {
  
         let logger = try request.make(Logger.self)
         logger.verbose(request.http.body.debugDescription)
@@ -36,13 +29,13 @@ final class TrollbotController: RouteCollection {
             let hmac = try HMAC.SHA256.authenticate(finalString, key: Environment.get("SIGNING_SECRET")!)
             let hash = hmac.map { String(format: "%02x", $0) }.joined()
             
-            if "v0=\(hash)" == secret, let event = data.event {
-                reply(event)
-                return HTTPResponse(status: .ok)
+            if "v0=\(hash)" == secret {
+                reply(data.event)
+                return .ok
             }
         }
         
-        return HTTPResponse(status: .unauthorized)
+        return .unauthorized
     }
     
     
