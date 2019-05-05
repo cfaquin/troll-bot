@@ -177,17 +177,17 @@ enum AndroidMocking: Int, CaseCountable {
     var words: String {
         switch self {
         case .kanyeLovesDroid:
-            return ":taklcheck:Fact: Kanye has an Android :crazy_kanye:"
+            return ":taklcheck: :fact: Kanye has an Android :crazy_kanye:"
         case .droidNKorea:
-            return ":taklcheck:Fact: Android has 100% of the market share in North Korea"
+            return ":taklcheck: :fact: Android has 100% of the market share in North Korea"
         case .droidShmoid:
             return "Droid schmoid "
         case .butterBot:
-            return ":butterbot:\n\n:this: runs on Android ThinMintOS 5.0"
+            return ":butterbot: \n :this: runs on Android ThinMintOS 5.0"
         case .dumbDroid:
             return ":android: \"i am dumb\""
         case .androided:
-            return ":taklcheck:Fact: \"androided\" is synonymous with \"munsoned\""
+            return ":taklcheck: :Fact: \"androided\" is synonymous with \"munsoned\""
         case .studio:
             return ":butterbot: told me he was created in :android_studio:"
         }
@@ -210,21 +210,21 @@ enum WebMocking: Int, CaseCountable {
     var words: String {
         switch self {
         case .puke:
-            return ":ruby::puke:"
+            return ":ruby: :puke:"
         case .shitStorm:
-            return ":ruby:on:rails:\n\n  :shitstorm:"
+            return ":ruby: \n :shitstorm:"
         case .waitingOnWeb:
             return "Wow. ALWAYS Wow. (Waiting on web) :knuckles_waiting:"
         case .rupee:
-            return ":taklcheck:Fact: \"ruby\" was originally called \"rupee\" because it's Russian"
+            return ":taklcheck: Fact: \"ruby\" was originally called \"rupee\" because it's Russian"
         case .mrClean:
             return "Have you seen this man? :mrclean:"
         case .amberAlert:
-            return ":taklcheck:Fact: amber alerts are actually ruby alerts."
+            return ":taklcheck: Fact: amber alerts are actually ruby alerts."
         case .skittleVomit:
-            return ":ruby: + :Rails: = :barf:"
+            return ":ruby: + :rails: = :barf:"
         case .poop:
-            return "Did you just mention :poop:?"
+            return "Did you just mention :poop: ?"
         case .charlieBrown:
             return ":charlie_eyeroll:"
         }
@@ -247,17 +247,17 @@ enum ApplePraising: Int, CaseCountable {
         case .steveJobs:
             return ":stevejobs: what a visionary. We owe him so much, don't you think?:taklcheck::taklcheck::taklcheck:"
         case .macbooks:
-            return "Did you mention a :apple_logo:? All of you use Macbooks for a reason.:taklcheck::taklcheck::taklcheck:"
+            return "Did you mention a :apple_logo: ? All of you use Macbooks for a reason. :taklcheck: :taklcheck: :taklcheck:"
         case .duffman:
-            return "\"Oh yeah!\" :duffman:"
+            return "\"Oh yeah!\" :duffman: "
         case .travolta:
-            return "So freaking cool :travolta:"
+            return "So freaking cool :travolta: "
         case .frogTrance:
-            return ":hypnotoad:"
+            return " :hypnotoad: "
         case .appleLogo:
-            return ":apple_logo: is great.  Don't you think? :taklcheck:"
+            return " :apple_logo: is great.  Don't you think? :taklcheck: "
         case .beachBall:
-            return "I could seriously look at :beachball: all day. What a great product.:taklcheck:"
+            return "I could seriously look at :beachball: all day. What a great product. :taklcheck: "
         }
     }
 }
@@ -273,13 +273,13 @@ enum LaughTrack: Int, CaseCountable {
     var words: String {
         switch self {
         case .haha:
-            return "Laugh out loud! That was so funny, yall. LOL! :numb:"
+            return "Laugh out loud! That was so funny, yall. LOL! :numb: "
         case .whyAreWeLaughing:
-            return "OMG, hahahahahah! What are we laughing about, you guys? :cowboy:"
+            return "OMG, hahahahahah! What are we laughing about, you guys? :cowboy: "
         case .laughing:
-            return "I just laughed out loud so hard. OMG-LOL. That was so good. Just amazing, really. Laughing still.  So good. :ermygerd:"
+            return "I just laughed out loud so hard. OMG-LOL. That was so good. Just amazing, really. Laughing still.  So good. :ermygerd: "
         case .soFunny:
-            return "Haha! Wow, you are so funny! I'm serious. What a good joke! Seriously, everyone thinks you are so funny :twerk:"
+            return "Haha! Wow, you are so funny! I'm serious. What a good joke! Seriously, everyone thinks you are so funny :twerk: "
         }
     }
 }

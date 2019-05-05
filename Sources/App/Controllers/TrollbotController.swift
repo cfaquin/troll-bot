@@ -58,10 +58,8 @@ final class TrollbotController: RouteCollection {
     
     private func checkForReply(_ event: SlackEvent) {
         
-        print("pre-troll response")
-        guard let input = event.text, let trollResponse = StaticDumbBrain().analyzeMessageAndCreateResponse(input) else { return }
+        guard let input = event.text, (event.username?.lowercased() != Environment.get("BOT_USERNAME")?.lowercased()) && (event.bot_id != Environment.get("BOT_ID")), let trollResponse = StaticDumbBrain().analyzeMessageAndCreateResponse(input.lowercased()) else { return }
    
-        print("troll response")
         
         let channel = event.channel ?? ""
         

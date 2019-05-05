@@ -19,5 +19,7 @@ struct SlackEvent: Content {
     let user: String?
     let text: String?
     let channel: String?
+    let username: String?
+    let bot_id: String? 
 }
 
