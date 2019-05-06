@@ -1,4 +1,4 @@
-
+import Vapor
 import Foundation
 import Crypto 
 
@@ -29,6 +29,9 @@ class StaticDumbBrain {
         case let text where (text.contains(Trigger.ios.rawValue)) || (text.contains(Trigger.iphone.rawValue)) || (text.contains(Trigger.apple.rawValue)):
             return ApplePraising(rawValue: Int.random(in: 0..<ApplePraising.caseCount))?.words
         default:
+            if let botName = Environment.get("BOT_USERNAME")?.lowercased(), text.contains(botName) {
+                return TrollbotSummoner(rawValue: Int.random(in: 0..<TrollbotSummoner.caseCount))?.words
+            }
             return nil
         }
     }
@@ -119,6 +122,7 @@ enum FailureMocking: Int, CaseCountable {
     case failBot
     case somethingWentWrong
     case milkCarton
+    case jenkins
     
     var words: String {
         
@@ -159,6 +163,8 @@ enum FailureMocking: Int, CaseCountable {
             return "Something went wrong. :captain_obvious:"
         case .milkCarton:
             return "Didn't I see your face on a milk carton last week?"
+        case .jenkins:
+            return " :dealwithitjenkins: "
         }
     }
 }
@@ -190,6 +196,50 @@ enum AndroidMocking: Int, CaseCountable {
             return ":taklcheck: :Fact: \"androided\" is synonymous with \"munsoned\""
         case .studio:
             return ":butterbot: told me he was created in :android_studio:"
+        }
+    }
+}
+
+
+
+enum TrollbotSummoner: Int, CaseCountable {
+    
+    case youRangSir
+    case wtfDoYouWant
+    case didYouSaySomething
+    case keepMyNameOutYourMouth
+    case yesSatan
+    case iCantHearYou
+    case turnUpTheICP
+    case thinky
+    case what
+    case wat
+    case milkCarton
+    
+    var words: String {
+        switch self {
+        case .youRangSir:
+            return "You rang, sir. :tipfedora:"
+        case .wtfDoYouWant:
+            return "W!T!F! do YOU want"
+        case .what:
+            return "i'm busy, what? :question_block: "
+        case .thinky:
+            return " :rotating_thinky: "
+        case .turnUpTheICP:
+            return "Turn up the ICP to drown out that noise"
+        case .yesSatan:
+            return "Yes, Satan? Oh I'm sorry, I thought you were someone else. :i_see_what_you_did_there: "
+        case .iCantHearYou:
+            return "What did you say again? I wasn't listening, as usual."
+        case .keepMyNameOutYourMouth:
+            return "Don't talk to me."
+        case .didYouSaySomething:
+            return "Did you say something? Don't worry, nobody was listening?"
+        case .wat:
+            return " :wat: "
+        case .milkCarton:
+            return "Funny story: you look like the kid on my milk carton last week."
         }
     }
 }

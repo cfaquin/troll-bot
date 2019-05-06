@@ -17,8 +17,15 @@ final class TrollbotController: RouteCollection {
     func send(_ request: Request, _ data: SlackRequest) throws -> HTTPStatus {
  
         let logger = try request.make(Logger.self)
-        logger.verbose(request.http.body.debugDescription)
+        
+        let prettyString = request.http.body.debugDescription.replacingOccurrences(of: ",", with: ",\n").replacingOccurrences(of: "{", with: "{\n").replacingOccurrences(of: "}", with: "}\n")
+        logger.verbose(prettyString)
         logger.verbose(request.http.headers.debugDescription)
+        
+        // set the CHANNEL_ID environment varaible to restrict trolling to 1 channel
+        if data.event.channel != Environment.get("CHANNEL_ID") {
+            return .unauthorized
+        }
         
         if let secret = request.http.headers.firstValue(name: HTTPHeaderName("X-Slack-Signature")),
             let timestamp = request.http.headers.firstValue(name: HTTPHeaderName("X-Slack-Request-Timestamp")),
