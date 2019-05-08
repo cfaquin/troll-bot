@@ -2,6 +2,17 @@ import Vapor
 import Foundation
 import Crypto
 
+enum ColorType: String {
+    case good
+    case warning
+    case danger
+}
+
+enum EventType: String {
+    case message
+    case reaction_added
+}
+
 struct SlackRequest: Content {
     let token: String
     let team_id: String
@@ -19,6 +30,17 @@ struct SlackEvent: Content {
     let text: String?
     let channel: String?
     let username: String?
-    let bot_id: String? 
+    let bot_id: String?
+    let attachments: [SlackAttachment]?
+}
+
+
+struct SlackAttachment: Content {
+    let text: String?
+    let ts: UInt64?
+    let title: String?
+    let title_link: String?
+    let pretext: String?
+    let color: String?
 }
 

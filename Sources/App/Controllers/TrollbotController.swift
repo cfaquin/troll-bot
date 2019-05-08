@@ -18,9 +18,9 @@ final class TrollbotController: RouteCollection {
  
         let logger = try request.make(Logger.self)
         
-        let prettyString = request.http.body.debugDescription.replacingOccurrences(of: ",", with: ",\n").replacingOccurrences(of: "{", with: "{\n").replacingOccurrences(of: "}", with: "}\n")
-        logger.verbose(prettyString)
-        logger.verbose(request.http.headers.debugDescription)
+        let prettyString = request.http.body.debugDescription.replacingOccurrences(of: ",", with: ",\n     ").replacingOccurrences(of: "{", with: "{\n\n     ").replacingOccurrences(of: "}", with: "\n}\n")
+        logger.info(request.http.headers.debugDescription)
+        logger.info(prettyString)
         
         // set the CHANNEL_ID environment varaible to restrict trolling to 1 channel
         if data.event.channel != Environment.get("CHANNEL_ID") {
@@ -58,20 +58,49 @@ final class TrollbotController: RouteCollection {
     
     private func checkForReply(_ event: SlackEvent) {
         
-        guard let input = event.text, (event.username?.lowercased() != Environment.get("BOT_USERNAME")?.lowercased()) && (event.bot_id != Environment.get("BOT_ID")), let trollResponse = StaticDumbBrain().analyzeMessageAndCreateResponse(input.lowercased()) else { return }
-   
+        guard event.username?.lowercased() != Environment.get("BOT_USERNAME")?.lowercased(), event.bot_id != Environment.get("BOT_ID") else { return }
         
+        var input = ""
+        
+        if event.type == "reaction_added" {
+            input = "reaction"
+        }
+        else {
+            
+            if let regularMessageText = event.text, !regularMessageText.isEmpty {
+                input = regularMessageText
+            }
+            else if let attachement = event.attachments?.first {
+                
+                if let title = attachement.title, let link = attachement.title_link, link.contains("giphy.com") {
+                    if title.count % 3 == 0 {
+                        input = "gif"
+                    }
+                }
+                else {
+                    input = attachement.text ?? ""
+                }
+            }
+        }
+            
+        guard let trollOutput = StaticDumbBrain().analyzeMessageAndCreateResponse(input.lowercased()) else { return }
+   
+        var trollResponse = trollOutput
+        
+        if trollOutput.contains("reaction"), let username = event.username {
+            trollResponse = trollOutput + ", \(username) :thumbsup: "
+        }
         let channel = event.channel ?? ""
         
         let response = """
         { "text": "\(trollResponse)", "channel": "\(channel)", "as_user": "false" }
         """
-        self.sendMessage(data: response)
+        self.postToChannel(data: response)
     }
    
     
     
-    private func sendMessage(data: String) {
+    private func postToChannel(data: String) {
         
         let token = "Bearer \(Environment.get("OAUTH_BOT_TOKEN")!)"
        

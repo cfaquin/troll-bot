@@ -28,6 +28,13 @@ class StaticDumbBrain {
             
         case let text where (text.contains(Trigger.ios.rawValue)) || (text.contains(Trigger.iphone.rawValue)) || (text.contains(Trigger.apple.rawValue)):
             return ApplePraising(rawValue: Int.random(in: 0..<ApplePraising.caseCount))?.words
+            
+        case let text where (text.contains("gif")):
+            return "haha :this: gif " + (LaughTrack(rawValue: Int.random(in: 0..<LaughTrack.caseCount))?.words ?? "")
+            
+        case let text where (text.contains("reaction")):
+            return "great reaction there"
+            
         default:
             if let botName = Environment.get("BOT_USERNAME")?.lowercased(), text.contains(botName) {
                 return TrollbotSummoner(rawValue: Int.random(in: 0..<TrollbotSummoner.caseCount))?.words
